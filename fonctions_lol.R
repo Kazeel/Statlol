@@ -9,12 +9,12 @@
 #############################################################################
 # MISE à JOUR
 # Les fonctions sont en train d'être mise à jour
+# lol.statsjoueur : n'est plus supporté donc il n'y a pas de tableau de stats généralisé
+# logiquement, les fonctions associés ne sont donc plus prise en compte (statsjoueur.clean etc...)
 
 #############################################################################
 # lol.idjoueur : renvoie l'id d'un joueur à partir de son pseudo (V3)
-# lol.statsjoueur : renvoie les stats d'un joueur avec son id
-# lol.statsjoueur.clean : renvoie une matrice propre de stats depuis le 3eme element de resultat de la fonction lol.statsjoueur
-# lol.basechampions : renvoie la liste des champions
+# lol.matchslist.ranked.easy : renvoie la liste des parties classés à partir de l'account.id (V3)
 
 # lol.staticdata.version : renvoie le numeros de la derniere version du site des donnees fixes
 
@@ -34,77 +34,32 @@
 # pour récupérer un élèment, utilisez les [[]] car la liste est nommée.
 
 lol.idjoueur <- function(pseudo, serveur, key){
+  
   fichier.json<-paste("https://",serveur,".api.riotgames.com/lol/summoner/v3/summoners/by-name/",pseudo,"?api_key=",key,sep="")
   liste<- fromJSON(fichier.json)
   return(liste)
   
 }
 
-######################################################
-#lol.statsjoueur
-######################################################
-# Renvoie les statistiques sur les champions en partie classee d'un joueur à partir de son id
-# Les champions sont designes en fonction de leurs id
-# Il faut renseigner le serveur comme euw, eune etc...
-# La saison est designe en année
-# La key est la clef d'utilisation des api persos
+#######################################################
+# lol.matchslist.ranked.easy
+#####################################################
+# La fonction permet de récupérer la liste des matchs classés d'un joueur
+# L'Api étant embetante à utiliser avec ses paramètres optionnels, la version ici est la plus simple (easy)
+# Elle renvera environ 150 parties, pour plus d'efficacité, il faudra coder la version classique permettant de choisir les dates.
+# Le resultat est une liste avec 4 éléments :
+# "matches" : un tableau de donnée avec le serveur, l'id des matches, les champions joués, la file, la saison, le timestamp, le role et la lane.
+# "startIndex" : qui est la valeur de début de l'index (0 étant le début de l'historique)
+# "endIndex" : la fin de l'index (ampleur max : 100)
+# "totalGames": le nombre de parties extraites.
 
-lol.statsjoueur <- function(id, serveur, saison, key){
+lol.matchslist.ranked.easy <- function(account.id, serveur, key){
   
-  fichier.json <-paste("https://",serveur,".api.pvp.net/api/lol/",serveur,"/v1.3/stats/by-summoner/",id,"/ranked?season=SEASON",saison,"&api_key=",key,sep="")
-  liste<-fromJSON(fichier.json)
+  fichier.json<-paste("https://",serveur,".api.riotgames.com/lol/match/v3/matchlists/by-account/",account.id,"?api_key=",key,sep="")
+  liste<- fromJSON(fichier.json)
   return(liste)
   
 }
-
-# La fonction renvoie une liste de 3 elements
-# "summinerId" avec l'Id du joueur
-# "modifyDate" qui renvoie la date de derniere modification
-# "champions" qui renvoie une liste dans une liste, c'est vraiment bordelique, alors il y a une fonction pour gerer cette partie la
-
-#######################################################
-#lol.statsjoueur.clean
-######################################################
-# Le principe est de nettoyer les informations reçus par lol.statjoueur
-# Pour cela, il faut y rentrer le tableau "champions" obtenu par lol.statsjoueur
-
-lol.statsjoueur.clean<- function(statsjoueur){
-  data <- unlist(statsjoueur)
-  nrow <- nrow(statsjoueur)
-  ncol <- length(unlist(statsjoueur))/nrow
-  dimnames <- list(c(),names(cbind(statsjoueur[1],statsjoueur$stats)))
-  stats.table<-matrix(data = data,nrow = nrow,ncol= ncol,byrow = FALSE,dimnames = dimnames)
-  
-  return(stats.table)
-}
-
-# La fonction renvoie une matrice 
-# En ligne les champions, le chmapion 0 est le total
-# En colonne les différentes variables (voir sur api riot)
-#####################################################
-#lol.basechampions
-###################################################
-#La fonction renvoie la liste des champions
-
-lol.basechampions<- function(serveur, key){
-  
-  fichier.json <-paste("https://global.api.pvp.net/api/lol/static-data/",serveur,"/v1.2/champion?api_key=",key,sep="")
-  liste<-fromJSON(fichier.json)
-  champions<-liste$data
-  
-  names<-c()
-  ids<- c()
-  for (i in 1:length(champions)){
-    names<-append(names,champions[[i]]$name)
-    ids<-append(ids,champions[[i]]$id)
-  }
-  
-  return(list(names,ids))
-}
-
-# La fonction renvoie une liste
-# Le premier element est un vecteur de chaine de character avec le nom des champions
-# Le deuxieme un vecteur avec le numero des champions dans l'ordre du premier vecteur
 #####################################################
 #lol.staticdata.version
 #####################################################
