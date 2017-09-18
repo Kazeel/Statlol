@@ -60,6 +60,22 @@ lol.matchslist.ranked.easy <- function(account.id, serveur, key){
   return(liste)
   
 }
+
+#######################################################
+# lol.matches
+#####################################################
+# La fonction permet de récupérer les informations d'un matchs
+# Je ne vais pas la décrire là donc bonne chance :D
+# Mais teams et participants sont surement les éléments les plus importants à regarder
+
+lol.matches <- function(matches.id, serveur, key){
+  
+  fichier.json<-paste("https://",serveur,".api.riotgames.com/lol/match/v3/matches/",matches.id,"?api_key=",key,sep="")
+  liste<- fromJSON(fichier.json)
+  return(liste)
+  
+}
+  
 #####################################################
 #lol.staticdata.version
 #####################################################

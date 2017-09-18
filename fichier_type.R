@@ -46,10 +46,15 @@ account.id<-result.id[[2]]
 #Récupérer la liste des matchs classés d'un joueur
 result.matchslist <- lol.matchslist.ranked.easy(account.id, serveur, key)
 matchs.list <- result.matchslist[[1]]
+matchs.id.test <- matchs.list[1,2]
+
+#Récupérer les informations principales d'un matchs
+result.matches <- lol.matches(matchs.id.test, serveur, key)
+teams.data.test <- result.matches[[11]]
+participants.data.test <- result.matches[[12]]
+participants.id.data.test <- result.matches[["participantIdentities"]]
 
 
-
-###################################################################
 #Test Adresse des images et version
 
 version<-lol.staticdata.version(server,key)[1]
