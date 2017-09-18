@@ -53,7 +53,7 @@ result.matches <- lol.matches(matchs.id.test, serveur, key)
 teams.data.test <- result.matches[[11]]
 participants.data.test <- result.matches[[12]]
 participants.id.data.test <- result.matches[["participantIdentities"]]
-
+test.merge <- merge(participants.data.test, participants.id.data.test)
 
 #Test Adresse des images et version
 
