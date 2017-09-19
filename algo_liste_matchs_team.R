@@ -116,7 +116,7 @@ for(i in 1:length(vec.id_games)){
       loop.merge <- merge(stat.tab, participants.tab)
       
       duration <- rep(json.tab$gameDuration, 10)
-      loop.merge<- merge(loop.merge, duration)
+      loop.merge<- cbind(loop.merge, duration)
       
       row.names(loop.merge) <- paste(id.loop, c(0:9), sep = "")
   
@@ -124,9 +124,8 @@ for(i in 1:length(vec.id_games)){
     }
   } 
 }
-prout<-as.data.frame(loop.tab)
+
 write.csv(loop.tab, file = "stats_game_team.csv") #Enregistrement
 
-names(loop.tab)[!(names(loop.tab) %in% names(loop.merge))]
 
 
