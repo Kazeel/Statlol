@@ -56,7 +56,7 @@ write.csv(data.pseudo_id, file = "ids_joueurs.csv") #Enregistrement
 ###########################
 # Récupération de la liste des matchs de chaque joueur
 ###########################
-#
+# Ne gère pas les /REMAKE
 #
 #
 ###############################
@@ -72,5 +72,57 @@ for(i in 1:5){
 }
 
 flex.listes_matchs <- subset(listes_matchs, queue == 440)
-team.games <- flex.listes_matchs[duplicated(flex.listes_matchs$gameId, fromLast = TRUE),c(1,2,5,6)]
+team.games <- unique(flex.listes_matchs[,c(1,2,5,6)])
 write.csv(team.games, file = "liste_game_team.csv") #Enregistrement
+
+###############################
+# Obtention des tableaux des joueurs des matchs avec le nom des joueurs
+##############################
+# je n'ai pas encore géré les teams
+#
+#
+##############################
+
+vec.id_games <- team.games$gameId
+loop.tab <- data.frame()
+
+json.tab <- NULL
+stat.tab <- NULL
+stats.stat.tab <- NULL
+
+participants.tab <- NULL
+player.partcipants.tab <- NULL
+
+loop.merge <- NULL
+loop.tab<- NULL
+
+for(i in 1:length(vec.id_games)){
+  id.loop <- vec.id_games[i]
+  if(id.loop != 0 ){
+    json.tab <- lol.matches(id.loop, serveur, key)
+    
+    if(json.tab$gameDuration >= 300){
+    
+      stat.tab <- json.tab[[12]]
+      stats.stat.tab <- stat.tab$stats
+      stat.tab <- cbind(stat.tab[,c("participantId", "teamId")],stats.stat.tab)
+      names(stat.tab)[1]<- "partcipantId"
+      
+      participants.tab <- json.tab[["participantIdentities"]]
+      player.partcipants.tab <-participants.tab$player
+      participants.tab <- cbind(participants.tab[,1], player.partcipants.tab)
+      names(participants.tab)[1]<- names(stat.tab)[1]
+      
+      loop.merge <- merge(stat.tab, participants.tab)
+      row.names(loop.merge) <- paste(id.loop, c(0:9), sep = "")
+  
+      loop.tab<- rbind(loop.tab,loop.merge)
+    }
+  } 
+}
+prout<-as.data.frame(loop.tab)
+write.csv(loop.tab, file = "stats_game_team.csv") #Enregistrement
+
+names(loop.tab)[!(names(loop.tab) %in% names(loop.merge))]
+
+
