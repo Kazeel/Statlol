@@ -114,6 +114,10 @@ for(i in 1:length(vec.id_games)){
       names(participants.tab)[1]<- names(stat.tab)[1]
       
       loop.merge <- merge(stat.tab, participants.tab)
+      
+      duration <- rep(json.tab$gameDuration, 10)
+      loop.merge<- merge(loop.merge, duration)
+      
       row.names(loop.merge) <- paste(id.loop, c(0:9), sep = "")
   
       loop.tab<- rbind(loop.tab,loop.merge)
