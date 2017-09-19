@@ -16,7 +16,7 @@
 pseudo <- "Kazeel"
 serveur <- "euw1"
 saison <- 2016
-key    <- "RGAPI-6821158c-1c77-4553-be1c-26e7c54aff6f"
+key    <- "RGAPI-ea3a2952-91ac-48be-96c0-0bcd83f505a9"
 
 ##########################
 # Fonctions
@@ -24,9 +24,8 @@ key    <- "RGAPI-6821158c-1c77-4553-be1c-26e7c54aff6f"
 #
 #
 #############################
-dir <- "C:/Documents/GitHub/Statlol"
-chemin<- file.path(dir,"fonctions_lol.R")
-source(file = chemin)
+setwd("C:/Documents/GitHub/Statlol")      # Attention, ce chemin n'est pas relatif
+source("fonctions_lol.R", local = TRUE)
 require(jsonlite)
 require(curl)
 require(httr)
