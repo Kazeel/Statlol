@@ -1,5 +1,5 @@
 #############################################################################
-#Functions LOL
+#Functions TEAM
 #############################################################################
 # You need this packages :
 
@@ -7,47 +7,72 @@
 # library(curl)
 # library(httr)
 ############################################################################
-# Functions using Riot APi
+# Functions using fonctions_lol.R 
 #############################################################################
-# lol.player : get summoner info with a summonername
-# lol.matchslist.r : get ranked game list of a player with a account id
-# lol.matches : get game info with game id
+# 
+# 
+# 
 
 ######################################################
-#lol.player
+#team.players
 ######################################################
-# get summoner info with a summonername
+# get summoners account ids of a team of 5 players
+# Return a data frame with Name and id
 # see Riot Api for more information
-# pseudo : summonername of a player (no space)
+# vec.players : vector of summoners name
 # serveur : region
 # key : a Riot Api key
 ########################################################
 
-lol.player <- function(pseudo, serveur, key){
+team.players <- function(vec.players, serveur, key){
+  # vec.players : vector of summoners name
   
-  fichier.json<-paste("https://",serveur,".api.riotgames.com/lol/summoner/v3/summoners/by-name/",pseudo,"?api_key=",key,sep="")
-  liste<- fromJSON(fichier.json)
-  return(liste)
-  
+  # Init
+  len <- length(vec.players)
+  players.ids <- c()
+  for(i in 1:len){
+    # Return 0 if a player is missing
+    if(vec.players[i] != "" ){
+      players.ids[i]<-lol.idjoueur(pseudo = vec.players[i], serveur = serveur, key = key)[["accountId"]]
+    } else{
+      players.ids[i] <- 0
+    }
+  }
+  return(players.id)
 }
 
 #######################################################
-# lol.matchslist.r
+# team.matchslist
 #####################################################
-# get ranked matchslist of a player
+# get ranked matchslist of team
 # see Riot Api for more information
-# account.id : account id of a player
+# vec.players : vector of summonerName
+# players.id : vector of summoner account id
 # serveur : region
 # key : a Riot Api key
 ########################################################
 
-lol.matchslist.r <- function(account.id, serveur, key){
+team.matchslist <- function(vec.players, players.id, serveur, key){
+  # 
   
-  fichier.json<-paste("https://",serveur,".api.riotgames.com/lol/match/v3/matchlists/by-account/",account.id,"?queue=440&api_key=",key,sep="")
-  liste<- fromJSON(fichier.json)
-  return(liste)
+  # Init
+  len <- length(vec.players)
+  data.matchs <- data.frame()
+  
+  # Algo
+  for(i in 1:len){
+    # Si l'Id est 0 alors vous n'avez pas rentré un pseudo
+    id.loop <- players.id[i]
+    pseudo.loop <- vec.players[i]
+    if(id.loop != 0 ){
+      data.matchs<- rbind(data.matchs,lol.matchslist.r(id.loop, serveur, key)[[1]])
+    } 
+  }
+  data.matchs.team <- unique(flex.data.matchs[,c(1,2,5,6)])
+  return(data.matchs.team)
   
 }
+
 
 #######################################################
 # lol.matches

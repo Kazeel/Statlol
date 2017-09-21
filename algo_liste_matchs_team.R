@@ -56,7 +56,6 @@ write.csv(data.pseudo_id, file = "ids_joueurs.csv") #Enregistrement
 ###########################
 # Récupération de la liste des matchs de chaque joueur
 ###########################
-# Ne gère pas les /REMAKE
 #
 #
 ###############################
