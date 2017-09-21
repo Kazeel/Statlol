@@ -16,7 +16,7 @@
 pseudo <- "Kazeel"
 serveur <- "euw1"
 saison <- 2016
-key    <- "RGAPI-ea3a2952-91ac-48be-96c0-0bcd83f505a9"
+key    <- "RGAPI-e207fef8-d466-4103-9bf6-00c0ea48e0fe"
 
 ##########################
 # Fonctions
@@ -26,6 +26,7 @@ key    <- "RGAPI-ea3a2952-91ac-48be-96c0-0bcd83f505a9"
 #############################
 setwd("C:/Documents/GitHub/Statlol")      # Attention, ce chemin n'est pas relatif
 source("fonctions_lol.R", local = TRUE)
+source("fonctions_team.R", local = TRUE)
 require(jsonlite)
 require(curl)
 require(httr)
@@ -54,8 +55,4 @@ participants.data.test <- result.matches[[12]]
 participants.id.data.test <- result.matches[["participantIdentities"]]
 test.merge <- merge(participants.data.test, participants.id.data.test)#RechercheV
 
-#Test Adresse des images et version
 
-version<-lol.staticdata.version(server,key)[1]
-square<-lol.staticdata.image("Urgot","square",0,version)
-loading<-lol.staticdata.image("Urgot","loading",1,version)

@@ -75,21 +75,60 @@ team.matchslist <- function(vec.players, players.id, serveur, key){
 
 
 #######################################################
-# lol.matches
+# team.matchsstats
 #####################################################
-# get matches info of a game
+# get all the stat of a list of games (for all players)
 # see Riot Api for more information
-# game.id : game id of a game
+# data.matchs.team : data.frame of a game id list (see team matchslist)
 # serveur : region
 # key : a Riot Api key
 ########################################################
 
-lol.matches <- function(game.id, serveur, key){
+team.matchsstats <- function(data.matchs.team, serveur, key){
   
-  fichier.json<-paste("https://",serveur,".api.riotgames.com/lol/match/v3/matches/",game.id,"?api_key=",key,sep="")
-  liste<- fromJSON(fichier.json)
-  return(liste)
+  # Init
+  vec.games.ids <- data.matchs.team$gameId
+  loop.tab <- data.frame()
   
+  json.tab <- NULL
+  stat.tab <- NULL
+  stats.stat.tab <- NULL
+  
+  participants.tab <- NULL
+  player.partcipants.tab <- NULL
+  
+  loop.merge <- NULL
+  loop.tab<- NULL
+  
+  for(i in 1:length(vec.games.ids)){
+    id.loop <- vec.games.ids[i]
+    if(id.loop != 0 ){
+      json.tab <- lol.matches(id.loop, serveur, key)
+      
+      if(json.tab$gameDuration >= 300){
+        
+        stat.tab <- json.tab[[12]]
+        stats.stat.tab <- stat.tab$stats
+        stat.tab <- cbind(stat.tab[,c("participantId", "teamId")],stats.stat.tab)
+        names(stat.tab)[1]<- "partcipantId"
+        
+        participants.tab <- json.tab[["participantIdentities"]]
+        player.partcipants.tab <-participants.tab$player
+        participants.tab <- cbind(participants.tab[,1], player.partcipants.tab)
+        names(participants.tab)[1]<- names(stat.tab)[1]
+        
+        loop.merge <- merge(stat.tab, participants.tab)
+        
+        duration <- rep(json.tab$gameDuration, 10)
+        loop.merge<- cbind(loop.merge, duration)
+        
+        row.names(loop.merge) <- paste(id.loop, c(0:9), sep = "")
+        
+        loop.tab<- rbind(loop.tab,loop.merge)
+      }
+    } 
+  }
+  return(loop.tab)
 }
 
 #############################################################
