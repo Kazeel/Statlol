@@ -43,7 +43,7 @@ ids_joueurs <- c()
 for(i in 1:5){
   # Si l'Id est 0 alors vous n'avez pas rentré un pseudo
   if(pseudos_joueurs[i] != "" ){
-    ids_joueurs[i]<-lol.idjoueur(pseudo = pseudos_joueurs[i], serveur = serveur, key = key)[["accountId"]]
+    ids_joueurs[i]<-lol.player(pseudo = pseudos_joueurs[i], serveur = serveur, key = key)[["accountId"]]
   } else{
     ids_joueurs[i] <- 0
   }
@@ -66,12 +66,11 @@ for(i in 1:5){
   id.loop <- data.pseudo_id[i,"ids_joueurs"]
   pseudo.loop <- data.pseudo_id[i,"pseudos_joueurs"]
   if(id.loop != 0 ){
-    listes_matchs<- rbind(listes_matchs,lol.matchslist.ranked.easy(id.loop, serveur, key)[[1]])
+    listes_matchs<- rbind(listes_matchs,lol.matchslist.r(id.loop, serveur, key)[[1]])
   } 
 }
 
-flex.listes_matchs <- subset(listes_matchs, queue == 440)
-team.games <- unique(flex.listes_matchs[,c(1,2,5,6)])
+team.games <- unique(listes_matchs[,c(1,2,5,6)])
 write.csv(team.games, file = "liste_game_team.csv") #Enregistrement
 
 ###############################
@@ -116,6 +115,8 @@ for(i in 1:length(vec.id_games)){
       
       duration <- rep(json.tab$gameDuration, 10)
       loop.merge<- cbind(loop.merge, duration)
+      
+      if
       
       row.names(loop.merge) <- paste(id.loop, c(0:9), sep = "")
   

@@ -33,12 +33,12 @@ team.players <- function(vec.players, serveur, key){
   for(i in 1:len){
     # Return 0 if a player is missing
     if(vec.players[i] != "" ){
-      players.ids[i]<-lol.idjoueur(pseudo = vec.players[i], serveur = serveur, key = key)[["accountId"]]
+      players.ids[i]<-lol.player(pseudo = vec.players[i], serveur = serveur, key = key)[["accountId"]]
     } else{
       players.ids[i] <- 0
     }
   }
-  return(players.id)
+  return(players.ids)
 }
 
 #######################################################
@@ -68,7 +68,7 @@ team.matchslist <- function(vec.players, players.id, serveur, key){
       data.matchs<- rbind(data.matchs,lol.matchslist.r(id.loop, serveur, key)[[1]])
     } 
   }
-  data.matchs.team <- unique(flex.data.matchs[,c(1,2,5,6)])
+  data.matchs.team <- unique(data.matchs[,c(1,2,5,6)])
   return(data.matchs.team)
   
 }
