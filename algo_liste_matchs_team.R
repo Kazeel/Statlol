@@ -116,11 +116,22 @@ for(i in 1:length(vec.id_games)){
       duration <- rep(json.tab$gameDuration, 10)
       loop.merge<- cbind(loop.merge, duration)
       
-      if
+      if((i!=1)&(length(names(loop.merge))!=length(names(loop.tab)))){
+        firstInhibitorAssist <- rep(NA, nrow(loop.merge))
+        firstInhibitorKill <- rep(NA, nrow(loop.merge))
+        loop.merge <- cbind(loop.merge, firstInhibitorKill)
+        names(loop.merge)[85]<- "firstInhibitorKill"
+        loop.merge <- cbind(loop.merge, firstInhibitorAssist)
+        names(loop.merge)[86]<- "firstInhibitorAssist"
+      }
       
       row.names(loop.merge) <- paste(id.loop, c(0:9), sep = "")
   
       loop.tab<- rbind(loop.tab,loop.merge)
+      
+      if(i%%10 == 0){
+        Sys.sleep(1) #Tant qu'on a pas une clef normale
+      }
     }
   } 
 }
