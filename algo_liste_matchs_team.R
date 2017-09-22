@@ -72,7 +72,8 @@ for(i in 1:5){
     nplayer <- nplayer +1
   } 
 }
-table.list <- table(listes_matchs$gameId)[table.list %in% nplayer]
+table.list <- table(listes_matchs$gameId)
+table.list <- table.list[table.list %in% nplayer]
 team.games <- unique(listes_matchs[,c(1,2,5,6)])
 team.games <- team.games[team.games$gameId %in% names(table.list),]
 write.csv(team.games, file = "liste_game_team.csv") #Enregistrement

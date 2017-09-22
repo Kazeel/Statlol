@@ -58,6 +58,7 @@ team.matchslist <- function(vec.players, players.id, serveur, key){
   # Init
   len <- length(vec.players)
   data.matchs <- data.frame()
+  nplayer <- 0
   
   # Algo
   for(i in 1:len){
@@ -65,11 +66,16 @@ team.matchslist <- function(vec.players, players.id, serveur, key){
     id.loop <- players.id[i]
     pseudo.loop <- vec.players[i]
     if(id.loop != 0 ){
-      data.matchs<- rbind(data.matchs,lol.matchslist.r(id.loop, serveur, key)[[1]])
-    } 
+      loop.list <- lol.matchslist.r(id.loop, serveur, key)[[1]]
+      listes_matchs <- rbind(listes_matchs, loop.list)
+      nplayer <- nplayer +1
+    }
   }
-  data.matchs.team <- unique(data.matchs[,c(1,2,5,6)])
-  return(data.matchs.team)
+  table.list <- table(listes_matchs$gameId)
+  table.list <- table.list[table.list %in% nplayer]
+  team.games <- unique(listes_matchs[,c(1,2,5,6)])
+  team.games <- team.games[team.games$gameId %in% names(table.list),]
+  return(team.games)
   
 }
 
