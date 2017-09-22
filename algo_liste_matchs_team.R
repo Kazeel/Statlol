@@ -61,16 +61,20 @@ write.csv(data.pseudo_id, file = "ids_joueurs.csv") #Enregistrement
 ###############################
 
 listes_matchs <- data.frame()
+nplayer <- 0
 for(i in 1:5){
   # Si l'Id est 0 alors vous n'avez pas rentré un pseudo
   id.loop <- data.pseudo_id[i,"ids_joueurs"]
   pseudo.loop <- data.pseudo_id[i,"pseudos_joueurs"]
   if(id.loop != 0 ){
-    listes_matchs<- rbind(listes_matchs,lol.matchslist.r(id.loop, serveur, key)[[1]])
+    loop.list <- lol.matchslist.r(id.loop, serveur, key)[[1]]
+    listes_matchs <- rbind(listes_matchs, loop.list)
+    nplayer <- nplayer +1
   } 
 }
-
+table.list <- table(listes_matchs$gameId)[table.list %in% nplayer]
 team.games <- unique(listes_matchs[,c(1,2,5,6)])
+team.games <- team.games[team.games$gameId %in% names(table.list),]
 write.csv(team.games, file = "liste_game_team.csv") #Enregistrement
 
 ###############################
@@ -129,8 +133,8 @@ for(i in 1:length(vec.id_games)){
   
       loop.tab<- rbind(loop.tab,loop.merge)
       
-      if(i%%10 == 0){
-        Sys.sleep(1) #Tant qu'on a pas une clef normale
+      if(i%%8 == 0){
+        Sys.sleep(10) #Tant qu'on a pas une clef normale
       }
     }
   } 
