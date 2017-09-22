@@ -57,19 +57,17 @@ team.matchslist <- function(vec.players, players.id, serveur, key){
   
   # Init
   len <- length(vec.players)
-  data.matchs <- data.frame()
+  listes_matchs <- data.frame()
   nplayer <- 0
-  
-  # Algo
-  for(i in 1:len){
+  for(i in 1:5){
     # Si l'Id est 0 alors vous n'avez pas rentré un pseudo
-    id.loop <- players.id[i]
-    pseudo.loop <- vec.players[i]
+    id.loop <- data.pseudo_id[i,"ids_joueurs"]
+    pseudo.loop <- data.pseudo_id[i,"pseudos_joueurs"]
     if(id.loop != 0 ){
       loop.list <- lol.matchslist.r(id.loop, serveur, key)[[1]]
       listes_matchs <- rbind(listes_matchs, loop.list)
       nplayer <- nplayer +1
-    }
+    } 
   }
   table.list <- table(listes_matchs$gameId)
   table.list <- table.list[table.list %in% nplayer]
