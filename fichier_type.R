@@ -63,11 +63,26 @@ participants.data.test <- result.matches[[12]]
 participants.id.data.test <- result.matches[["participantIdentities"]]
 test.merge <- merge(participants.data.test, participants.id.data.test)#RechercheV
 
+######################################
+
+dir.create("team_data")
+
 #Test team.player
 team.ids <- team.players(vec.joueurs,serveur,key)
+
+#Save
+team.folder <- paste("./team_data/",paste(team.ids, collapse = "_"), sep = "")
+dir.create(team.folder) # Create a specific folder for a team
+write.csv(team.ids, file = paste(team.folder,"/ids_joueurs.csv",sep = "")) #Enregistrement
 
 #Test team.matchslist
 team.matchs.list <- team.matchslist(vec.joueurs, team.ids, serveur, key)
 
+#Save
+write.csv(team.matchs.list, file = paste(team.folder,"/matchs_list.csv",sep = "")) #Enregistrement
+
 #Test team.matchsstats
 team.matchs.stats <- team.matchsstats(team.matchs.list, serveur, key)
+
+#Save
+write.csv(team.matchs.stats, file = paste(team.folder,"/matchs_stats.csv",sep = "")) #Enregistrement
