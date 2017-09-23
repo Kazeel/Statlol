@@ -1,0 +1,7 @@
+###############################
+# CODING OF SOME VALUE
+###############################
+
+# participantId
+100 : Blue Side
+200 : Red Side
