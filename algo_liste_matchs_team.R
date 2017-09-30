@@ -1,12 +1,12 @@
 #############################
-# Algorithme d'extraction des matchs d'une équipe
+# Algorithme d'extraction des matchs d'une ?quipe
 ###########################
 #
 #
 #
 #
 ###########################
-# Données utilisateurs & sourcing
+# Donn?es utilisateurs & sourcing
 ##########################
 #
 #
@@ -14,12 +14,12 @@
 ############################
 
 serveur <- "euw1"
-key    <- "RGAPI-ea3a2952-91ac-48be-96c0-0bcd83f505a9"
+key    <- "RGAPI-d64fc2d0-e746-4457-92fe-f707bc02bc36"
 
 ############################
-# Données joueurs
+# Donn?es joueurs
 ############################
-# Penser à retirer les espaces
+# Penser ? retirer les espaces
 #
 #
 ############################
@@ -31,7 +31,7 @@ pseudo_adc <- "RedWhale"
 pseudo_sup <- ""
 
 ###########################
-# Génération de la liste des joueurs et de leurs account.id
+# G?n?ration de la liste des joueurs et de leurs account.id
 ###########################
 #
 #
@@ -41,7 +41,7 @@ pseudo_sup <- ""
 pseudos_joueurs <- c("TOP"= pseudo_top, "JUN"= pseudo_jun, "MID"=pseudo_mid, "ADC"=pseudo_adc,"SUP"=pseudo_sup)
 ids_joueurs <- c()
 for(i in 1:5){
-  # Si l'Id est 0 alors vous n'avez pas rentré un pseudo
+  # Si l'Id est 0 alors vous n'avez pas rentr? un pseudo
   if(pseudos_joueurs[i] != "" ){
     ids_joueurs[i]<-lol.player(pseudo = pseudos_joueurs[i], serveur = serveur, key = key)[["accountId"]]
   } else{
@@ -54,7 +54,7 @@ data.pseudo_id <- data.frame(pseudos_joueurs, ids_joueurs)
 write.csv(data.pseudo_id, file = "ids_joueurs.csv") #Enregistrement
 
 ###########################
-# Récupération de la liste des matchs de chaque joueur
+# R?cup?ration de la liste des matchs de chaque joueur
 ###########################
 #
 #
@@ -63,7 +63,7 @@ write.csv(data.pseudo_id, file = "ids_joueurs.csv") #Enregistrement
 listes_matchs <- data.frame()
 nplayer <- 0
 for(i in 1:5){
-  # Si l'Id est 0 alors vous n'avez pas rentré un pseudo
+  # Si l'Id est 0 alors vous n'avez pas rentr? un pseudo
   id.loop <- data.pseudo_id[i,"ids_joueurs"]
   pseudo.loop <- data.pseudo_id[i,"pseudos_joueurs"]
   if(id.loop != 0 ){
@@ -81,7 +81,7 @@ write.csv(team.games, file = "liste_game_team.csv") #Enregistrement
 ###############################
 # Obtention des tableaux des joueurs des matchs avec le nom des joueurs
 ##############################
-# je n'ai pas encore géré les teams
+# je n'ai pas encore g?r? les teams
 #
 #
 ##############################
@@ -143,5 +143,7 @@ for(i in 1:length(vec.id_games)){
 
 write.csv(loop.tab, file = "stats_game_team.csv") #Enregistrement
 
-
+#####################################################################
+vec.players <- pseudos_joueurs
+data <- team.allstats(pseudos_joueurs, serveur, key)
 

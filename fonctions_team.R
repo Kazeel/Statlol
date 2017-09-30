@@ -17,7 +17,7 @@
 #team.players
 ######################################################
 # get summoners account ids of a team of 5 players
-# Return a data frame with Name and id
+# Return a vector with ids
 # see Riot Api for more information
 # vec.players : vector of summoners name
 # serveur : region
@@ -60,9 +60,9 @@ team.matchslist <- function(vec.players, players.id, serveur, key){
   listes_matchs <- data.frame()
   nplayer <- 0
   for(i in 1:5){
-    # Si l'Id est 0 alors vous n'avez pas rentré un pseudo
-    id.loop <- data.pseudo_id[i,"ids_joueurs"]
-    pseudo.loop <- data.pseudo_id[i,"pseudos_joueurs"]
+    # Si l'Id est 0 alors vous n'avez pas rentr? un pseudo
+    id.loop <- players.id[i]
+    pseudo.loop <- vec.players[i]
     if(id.loop != 0 ){
       loop.list <- lol.matchslist.r(id.loop, serveur, key)[[1]]
       listes_matchs <- rbind(listes_matchs, loop.list)
@@ -148,4 +148,20 @@ team.matchsstats <- function(data.matchs.team, serveur, key){
   return(loop.tab)
 }
 
-#############################################################
+#######################################################
+# team.allstats
+#####################################################
+# get all the stat of a list of games (for all players)
+# see Riot Api for more information
+# vec.players : vector of player
+# serveur : region
+# key : a Riot Api key
+########################################################
+
+team.allstats<- function(vec.players, serveur, key){
+  vec.id <- team.players(vec.players, serveur, key)
+  data.matchs.team <- team.matchslist(vec.players, vec.id, serveur, key)
+  result <- team.matchsstats(data.matchs.team, serveur, key)
+  
+  return(result)
+}

@@ -6,7 +6,7 @@
 #
 #
 ###########################
-# Données utilisateurs
+# Donn?es utilisateurs
 ##########################
 #
 #
@@ -16,7 +16,7 @@
 pseudo <- "Kazeel"
 serveur <- "euw1"
 saison <- 2016
-key    <- "RGAPI-e207fef8-d466-4103-9bf6-00c0ea48e0fe"
+key    <- "RGAPI-93834b4f-b9ab-4f0b-8d78-3a338cecf531"
 
 pseudo_top <- "RKSReidoz"
 pseudo_jun <- "Kazeel"
@@ -49,7 +49,7 @@ vec.joueurs <- c("TOP"= pseudo_top, "JUN"= pseudo_jun, "MID"=pseudo_mid, "ADC"=p
 
 #Test lol.player
 result.id<-  lol.player(pseudo, serveur, key)
-account.id<-result.id[[2]] #Get ID
+account.id<-result.id["accountId"] #Get ID
 
 #Test lol.matchslist.r
 result.matchslist <- lol.matchslist.r(account.id, serveur, key)
