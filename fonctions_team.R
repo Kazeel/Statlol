@@ -161,7 +161,29 @@ team.matchsstats <- function(data.matchs.team, serveur, key){
 team.allstats<- function(vec.players, serveur, key){
   vec.id <- team.players(vec.players, serveur, key)
   data.matchs.team <- team.matchslist(vec.players, vec.id, serveur, key)
-  result <- team.matchsstats(data.matchs.team, serveur, key)
-  
+  data <- team.matchsstats(data.matchs.team, serveur, key)
+  result <- team.cleaner(data, vec.id)
   return(result)
+}
+
+#######################################################
+# team.cleaner
+#####################################################
+# clean data of a team (keep only a few data)
+# data : data frame of a team
+########################################################
+
+team.cleaner <- function(data,vec.id){
+  clean.column <- data[,c("teamId","win","kills","deaths","assists","totalDamageDealt","magicDamageDealt",
+                          "physicalDamageDealt","trueDamageDealt","totalDamageDealtToChampions","magicDamageDealtToChampions",
+                          "physicalDamageDealtToChampions","trueDamageDealtToChampions","totalHeal","totalUnitsHealed",
+                          "damageDealtToTurrets","visionScore","timeCCingOthers","totalDamageTaken","magicalDamageTaken",
+                          "trueDamageTaken","goldEarned","turretKills","inhibitorKills","totalMinionsKilled",
+                          "neutralMinionsKilled","neutralMinionsKilledTeamJungle","neutralMinionsKilledEnemyJungle",
+                          "totalTimeCrowdControlDealt","visionWardsBoughtInGame","sightWardsBoughtInGame","wardsPlaced",
+                          "firstBloodKill","firstBloodAssist","firstTowerKill","firstTowerAssist","firstInhibitorKill",
+                          "firstInhibitorAssist","accountId","summonerName","summonerId","duration" )]
+  clean.row <- clean.column[clean.column[,"accountId"] %in% vec.id,]
+  
+  return(clean.row)
 }
