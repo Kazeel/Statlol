@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#############################################################################\n#Class LOL Player\n#############################################################################\n# You need this packages :\n\n# library(jsonlite)\n# library(curl)\n# library(httr)\n############################################################################\n# Functions using Riot APi\n#############################################################################\n\n#############################################################################\n#\n############################################################################\n\nsetClass(\n  Class = \"player\",\n  representation = representation(\n    summonername = \"character\",\n    profileIconId = \"numeric\",\n    name = \"character\",\n    summonerLevel= \"numeric\",\n    accountId = \"character\",\n    id =  \"character\",\n    revisionDate = \"numeric\"\n  )\n)\n\nsetMethod(\"print\",\"player\",\n          function(x,...){\n            \n          }\n)",
+    "created" : 1508601546421.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2274986685",
+    "id" : "7B642EEA",
+    "lastKnownWriteTime" : 1508604973,
+    "last_content_update" : 1508604973329,
+    "path" : "~/GitHub/Statlol/lol_class_player.R",
+    "project_path" : "lol_class_player.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
