@@ -1,14 +1,14 @@
 {
     "collab_server" : "",
-    "contents" : "#############################################################################\n#Class LOL Player\n#############################################################################\n# You need this packages :\n\n# library(jsonlite)\n# library(curl)\n# library(httr)\n############################################################################\n# Functions using Riot APi\n#############################################################################\n\n#############################################################################\n#\n############################################################################\n\nsetClass(\n  Class = \"player\",\n  representation = representation(\n    summonername = \"character\",\n    profileIconId = \"numeric\",\n    name = \"character\",\n    summonerLevel= \"numeric\",\n    accountId = \"character\",\n    id =  \"character\",\n    revisionDate = \"numeric\"\n  )\n)\n\nsetMethod(\"print\",\"player\",\n          function(x,...){\n            \n          }\n)",
+    "contents" : "#############################################################################\n#Class LOL Player\n#############################################################################\n# You need this packages :\n\n# library(jsonlite)\n# library(curl)\n# library(httr)\n############################################################################\n# Functions using Riot APi\n#############################################################################\n\n#############################################################################\n#\n############################################################################\n\nsetClass(\n  Class = \"player\",\n  representation = representation(\n    profileIconId = \"numeric\",\n    name = \"character\",\n    summonerLevel= \"numeric\",\n    accountId = \"character\",\n    id =  \"character\",\n    revisionDate = \"numeric\"\n  )\n)\n\nsetMethod(\"print\",\"player\",\n          function(x,...){\n            cat(\"*** Class player, method Print ***\\n\")\n            cat(\"* profileIconId = \");print(x@profileIconId)\n            cat(\"* name = \");print(x@name)\n            cat(\"* summonerLevel= \");print(x@summonerLevel)\n            cat(\"* accountId= \");print(x@accountId)\n            cat(\"* id= \");print(x@id)\n            cat(\"* revisionDate= \");print(x@revisionDate)\n            cat(\"***** Fin Print(trajectoires) *****\\n\")\n          }\n)\n\nsetMethod(\"show\",\"player\",\n          function(object){\n            cat(\"*** Class player, method Print ***\\n\")\n            cat(\"* profileIconId = \");print(object@profileIconId)\n            cat(\"* name = \");print(object@name)\n            cat(\"* summonerLevel= \");print(object@summonerLevel)\n            cat(\"* accountId= \");print(object@accountId)\n            cat(\"* id= \");print(object@id)\n            cat(\"* revisionDate= \");print(object@revisionDate)\n            cat(\"***** Fin Print(trajectoires) *****\\n\")\n          }\n)\n\nsetGeneric(\n  name = \n)",
     "created" : 1508601546421.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "2274986685",
+    "hash" : "1200743958",
     "id" : "7B642EEA",
-    "lastKnownWriteTime" : 1508604973,
-    "last_content_update" : 1508604973329,
+    "lastKnownWriteTime" : 1508619020,
+    "last_content_update" : 1508619020264,
     "path" : "~/GitHub/Statlol/lol_class_player.R",
     "project_path" : "lol_class_player.R",
     "properties" : {
