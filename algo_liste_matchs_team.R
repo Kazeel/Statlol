@@ -14,7 +14,7 @@
 ############################
 
 serveur <- "euw1"
-key    <- "RGAPI-d64fc2d0-e746-4457-92fe-f707bc02bc36"
+key    <- "RGAPI-c6db6ff7-f11b-4141-86b3-6d10c1842a76"
 
 ############################
 # Donn?es joueurs

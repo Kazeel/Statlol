@@ -109,7 +109,7 @@ team.matchsstats <- function(data.matchs.team, serveur, key){
     if(id.loop != 0 ){
       json.tab <- lol.matches(id.loop, serveur, key)
       
-      if(json.tab$gameDuration >= 300){
+      if(json.tab$gameDuration >= 300){#delete remake
         
         stat.tab <- json.tab[[12]]
         stats.stat.tab <- stat.tab$stats
@@ -174,16 +174,52 @@ team.allstats<- function(vec.players, serveur, key){
 ########################################################
 
 team.cleaner <- function(data,vec.id){
-  clean.column <- data[,c("teamId","win","kills","deaths","assists","totalDamageDealt","magicDamageDealt",
-                          "physicalDamageDealt","trueDamageDealt","totalDamageDealtToChampions","magicDamageDealtToChampions",
-                          "physicalDamageDealtToChampions","trueDamageDealtToChampions","totalHeal","totalUnitsHealed",
-                          "damageDealtToTurrets","visionScore","timeCCingOthers","totalDamageTaken","magicalDamageTaken",
-                          "trueDamageTaken","goldEarned","turretKills","inhibitorKills","totalMinionsKilled",
-                          "neutralMinionsKilled","neutralMinionsKilledTeamJungle","neutralMinionsKilledEnemyJungle",
-                          "totalTimeCrowdControlDealt","visionWardsBoughtInGame","sightWardsBoughtInGame","wardsPlaced",
-                          "firstBloodKill","firstBloodAssist","firstTowerKill","firstTowerAssist","firstInhibitorKill",
-                          "firstInhibitorAssist","accountId","summonerName","summonerId","duration" )]
-  clean.row <- clean.column[clean.column[,"accountId"] %in% vec.id,]
   
-  return(clean.row)
+  matchinfo <- data[data[,"accountId"] %in% vec.id,] #Filter : players of the team
+  
+  clean.column<-data.frame(
+    #######################################
+    # player
+    Id=row.names(matchinfo),
+    Name=matchinfo$summonerName,
+    Id_Sum=matchinfo$summonerId,
+    Id_Ac=matchinfo$accountId,
+    
+    #######################################
+    # Stat player
+    Kill=matchinfo$kills,
+    Death=matchinfo$deaths,
+    Assist=matchinfo$assists,
+    
+    T_Damage_D=matchinfo$totalDamageDealt,
+    Damage_D=matchinfo$totalDamageDealtToChampions,
+    Damage_Turret=matchinfo$damageDealtToTurrets,
+    Turret=matchinfo$turretKills,
+    Inhib=matchinfo$inhibitorKills,
+    
+    Heal=matchinfo$totalHeal,
+    Heal_N=matchinfo$totalUnitsHealed,
+    
+    Score_Vision=matchinfo$visionScore,
+    vison_ward=matchinfo$visionWardsBoughtInGame,
+    ward=matchinfo$wardsPlaced,
+    
+    Damage_T=matchinfo$totalDamageTaken,
+    CC_score=matchinfo$timeCCingOthers,
+    CC_time=matchinfo$totalTimeCrowdControlDealt,
+    
+    Gold_E=matchinfo$goldEarned,
+    Minions=matchinfo$totalMinionsKilled,
+    Minionsbis=matchinfo$neutralMinionsKilled,
+    
+    F_Blood=matchinfo$firstBloodKill,
+    F_Tower=matchinfo$firstTowerKill,
+    ######################################
+    # team
+    Id_Team=matchinfo$teamId,
+    Win=matchinfo$win,
+    Duree=matchinfo$duration,
+    Id_game=substr(row.names(matchinfo),1,10))
+
+  return(clean.column)
 }

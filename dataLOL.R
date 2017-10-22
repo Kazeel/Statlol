@@ -8,18 +8,18 @@ matchinfo<-read.csv(paste(chemin,"matchs_stats.csv",sep=""))
 P1<-"Kazeel"
 P2<-"Red Whale"
 P3<-"Mashu"
-P4<-"SweepzKillz"
+P4<-"TheDeathCookie"
 P5<-"RKS Reidoz"
 listP<-c(P1,P2,P3,P4,P5)
 
 ###AJOUTER FONCTION RESTRICTION DONNEES EN FONCTION DES PLAYERS 
 names(matchinfo)
-matchinfo<-matchinfo[c(1:65,79:87)]
+matchinfo<-matchinfo[c(1:64,79:87)] # Correction faite : on se fiche de combatscore
 matchinfo<-matchinfo[c(1:5,13:74)]
 Data<-data.frame(Id=matchinfo$X,
-                     Id_Part= matchinfo$participantId,
-                     Id_Team=matchinfo$teamId,
-                     Win=matchinfo$win,
+                     Id_Part= matchinfo$participantId, #Not in the cleaner
+                     Id_Team=matchinfo$teamId, #In the cleaner
+                     Win=matchinfo$win, #In the cleaner
                      Kill=matchinfo$kills,
                      Death=matchinfo$deaths,
                      Assist=matchinfo$assists,
