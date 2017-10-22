@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#############################################################################\n#Functions LOL\n#############################################################################\n# You need this packages :\n\n# library(jsonlite)\n# library(curl)\n# library(httr)\n############################################################################\n# Functions using Riot APi\n#############################################################################\n# lol.player : get summoner info with a summonername\n# lol.matchslist.r : get ranked game list of a player with a account id\n# lol.matches : get game info with game id\n\n######################################################\n#lol.player\n######################################################\n# get summoner info with a summonername\n# see Riot Api for more information\n# pseudo : summonername of a player (no space)\n# serveur : region\n# key : a Riot Api key\n########################################################\n\nlol.player <- function(pseudo, serveur, key){\n  \n  pseudo<- tolower(pseudo)\n  pseudo<- gsub(\" \", \"\", pseudo, fixed = TRUE)\n  fichier.json<-paste(\"https://\",serveur,\".api.riotgames.com/lol/summoner/v3/summoners/by-name/\",pseudo,\"?api_key=\",key,sep=\"\")\n  liste<- fromJSON(fichier.json)\n  return(liste)\n  \n}\n\n#######################################################\n# lol.matchslist.r\n#####################################################\n# get ranked matchslist of a player\n# see Riot Api for more information\n# account.id : account id of a player\n# serveur : region\n# key : a Riot Api key\n########################################################\n\nlol.matchslist.r <- function(account.id, serveur, key){\n  \n  fichier.json<-paste(\"https://\",serveur,\".api.riotgames.com/lol/match/v3/matchlists/by-account/\",account.id,\"?queue=440&api_key=\",key,sep=\"\")\n  liste<- fromJSON(fichier.json)\n  return(liste)\n  \n}\n\n#######################################################\n# lol.matches\n#####################################################\n# get matches info of a game\n# see Riot Api for more information\n# game.id : game id of a game\n# serveur : region\n# key : a Riot Api key\n########################################################\n\nlol.matches <- function(game.id, serveur, key){\n  \n  fichier.json<-paste(\"https://\",serveur,\".api.riotgames.com/lol/match/v3/matches/\",game.id,\"?api_key=\",key,sep=\"\")\n  liste<- fromJSON(fichier.json)\n  return(liste)\n  \n}\n\n#############################################################",
+    "created" : 1506706352602.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2001863936",
+    "id" : "EF2B2AE0",
+    "lastKnownWriteTime" : 1508697897,
+    "last_content_update" : 1508697897472,
+    "path" : "~/GitHub/Statlol/fonctions_lol.R",
+    "project_path" : "fonctions_lol.R",
+    "properties" : {
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

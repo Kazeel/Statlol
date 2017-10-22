@@ -24,7 +24,7 @@ key    <- "RGAPI-c6db6ff7-f11b-4141-86b3-6d10c1842a76"
 #
 ############################
 
-pseudo_top <- "RKSReidoz"
+pseudo_top <- "RKS Reidoz"
 pseudo_jun <- "Kazeel"
 pseudo_mid <- "Mashu"
 pseudo_adc <- "RedWhale"
