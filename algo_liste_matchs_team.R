@@ -31,7 +31,7 @@ pseudo_adc <- "RedWhale"
 pseudo_sup <- ""
 
 ###########################
-# G?n?ration de la liste des joueurs et de leurs account.id
+# Generation de la liste des joueurs et de leurs account.id
 ###########################
 #
 #
@@ -41,7 +41,7 @@ pseudo_sup <- ""
 pseudos_joueurs <- c("TOP"= pseudo_top, "JUN"= pseudo_jun, "MID"=pseudo_mid, "ADC"=pseudo_adc,"SUP"=pseudo_sup)
 ids_joueurs <- c()
 for(i in 1:5){
-  # Si l'Id est 0 alors vous n'avez pas rentr? un pseudo
+  # Si l'Id est 0 alors vous n'avez pas rentre un pseudo
   if(pseudos_joueurs[i] != "" ){
     ids_joueurs[i]<-lol.player(pseudo = pseudos_joueurs[i], serveur = serveur, key = key)[["accountId"]]
   } else{

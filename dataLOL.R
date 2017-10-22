@@ -1,6 +1,8 @@
-joueur<-read.csv("ids_joueurs.csv")
-matchlist<-read.csv("matchs_list.csv")
-matchinfo<-read.csv("matchs_stats.csv")
+chemin<- "./team_data/228247387_28537998_35512027_41808027_0/"
+
+joueur<-read.csv(paste(chemin,"ids_joueurs.csv",sep=""))
+matchlist<-read.csv(paste(chemin,"matchs_list.csv",sep=""))
+matchinfo<-read.csv(paste(chemin,"matchs_stats.csv",sep=""))
 
 #Parametre
 P1<-"Kazeel"
@@ -10,7 +12,7 @@ P4<-"SweepzKillz"
 P5<-"RKS Reidoz"
 listP<-c(P1,P2,P3,P4,P5)
 
-###AJOUTER FONCTION RESTRICTION DONNEES ENFONCTION DESPLAYERS 
+###AJOUTER FONCTION RESTRICTION DONNEES EN FONCTION DES PLAYERS 
 names(matchinfo)
 matchinfo<-matchinfo[c(1:65,79:87)]
 matchinfo<-matchinfo[c(1:5,13:74)]
@@ -73,7 +75,7 @@ Player<-function(Name,Data){
 Play1<-Player(P1,Data);Play2<-Player(P2,Data);Play3<-Player(P3,Data);Play4<-Player(P4,Data);Play5<-Player(P5,Data)
 
 Equip<-function(equip,data){
-  #equip=vecteur conteant la lsite des 3 ou5 joueur de l'équipe
+  #equip=vecteur conteant la lsite des 3 ou5 joueur de l'?quipe
   if(typeof(equip)=="character"&(length(equip)==5|length(equip)==3)){
     #Restriction donnees au joueur
     for (i in 1:length(equip)){
@@ -92,7 +94,7 @@ Equip<-function(equip,data){
   C$Farm<-mean(Play1$Farm,Play2$Farm,Play3$Farm,Play4$Farm,Play5$Farm)
   class(C)<-c("Equip","Player")
   C}
-  else{print("Erreur: Paramètre equipe non-adapté!")}
+  else{print("Erreur: Param?tre equipe non-adapt?!")}
 }
 
 Equip1<-Equip(listP,data)
@@ -106,7 +108,7 @@ plot.Equip<-function(equip){
 
 
 Game<-function(Id,Etat,Duree){
-  #Création et constructeur de la classe Game qui est définie par un id (unique), un état et une durée
+  #Cr?ation et constructeur de la classe Game qui est d?finie par un id (unique), un ?tat et une dur?e
   Constructeur<-list(Etat=Etat,Duree=Duree)
   Constructeur$Id<-Id
   class(Constructeur)<-"Game"
@@ -116,13 +118,13 @@ Game<-function(Id,Etat,Duree){
 #Exemple 1
 G1<-Game(Data$Id_game[1],Data$Win[1],Data$Duree[1])
 print.Game<-function(game){
-  cat("La Game",game$Id,"a durée",game$Duree,"s \n")#A Corriger.
+  cat("La Game",game$Id,"a dur?e",game$Duree,"s \n")#A Corriger.
 }
 G1
 
 #Transformer Une variable en Factor pour la variable Win
 Test<-factor(Data$Win)
-attributes(Test)$levels<-c("Perdu","Gagné")
+attributes(Test)$levels<-c("Perdu","Gagn?")
 Test
 
 for(i in  1L:5L){

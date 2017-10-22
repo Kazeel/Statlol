@@ -11,11 +11,11 @@
 #############################################################################
 
 #############################################################################
-#
+# Class Player
 ############################################################################
 
 setClass(
-  Class = "player",
+  Class = "Player",
   representation = representation(
     profileIconId = "numeric",
     name = "character",
@@ -25,8 +25,10 @@ setClass(
     revisionDate = "numeric"
   )
 )
-
-setMethod("print","player",
+###############################################################################
+# Basic Methods
+##############################################################################
+setMethod("print","Player",
           function(x,...){
             cat("*** Class player, method Print ***\n")
             cat("* profileIconId = ");print(x@profileIconId)
@@ -39,7 +41,7 @@ setMethod("print","player",
           }
 )
 
-setMethod("show","player",
+setMethod("show","Player",
           function(object){
             cat("*** Class player, method Print ***\n")
             cat("* profileIconId = ");print(object@profileIconId)
@@ -51,7 +53,29 @@ setMethod("show","player",
             cat("***** Fin Print(trajectoires) *****\n")
           }
 )
+########################################################################
+# Constructors
+########################################################################
 
-setGeneric(
-  name = 
-)
+setGeneric(name = "player", def = function (name, accountId, id, ...) {standardGeneric("player")})
+
+setMethod(
+  f = "player", 
+  signature = signature(name = "character", accountId = "missing", id = "missing"),
+  definition = function (name) {
+    # TODO
+})
+
+setMethod(
+  f = "player", 
+  signature = signature(name = "missing", accountId = "character", id = "missing"),
+  definition = function (name) {
+    # TODO
+  })
+
+setMethod(
+  f = "player", 
+  signature = signature(name = "missing", accountId = "missing", id = "character"),
+  definition = function (name) {
+    # TODO
+  })

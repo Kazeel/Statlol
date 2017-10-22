@@ -1,0 +1,13 @@
+name: Statlol
+title: Statlol
+username:
+account: kazeel
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 227988
+bundleId: 1039395
+url: https://kazeel.shinyapps.io/Statlol/
+when: 1508678703.84333
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .gitattributes|codage_game_info.txt|codage_type_game.txt|dataLOL.R|fichier_type.R|googlesheet_algo.R|lol_class_api.R|lol_class_player.R|README.md|Image/Excel_capture.PNG|Image/excel_capture_2.PNG|Image/excel_saucisse.png|Image/excel_saucisse_2.png|Image/excel_saucisse_3.png|Image/R_capture.PNG|team_data/228247387_28537998_35512027_41808027_0/ids_joueurs.csv|team_data/228247387_28537998_35512027_41808027_0/matchs_list.csv|team_data/228247387_28537998_35512027_41808027_0/matchs_stats.csv
