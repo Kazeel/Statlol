@@ -37,8 +37,12 @@ ui <- fluidPage(
       ),
       #################################################################################
       # Show a plot of the generated distribution
-      mainPanel(
-        DT::dataTableOutput("mytable")
+      mainPanel(tabsetPanel(
+        tabPanel("Plot", plotOutput("plot")),
+        tabPanel("Summary", DT::dataTableOutput("meantable")),
+        tabPanel("Data", DT::dataTableOutput("fulltable"))
+      )
+        
       )
    )
 )
@@ -56,22 +60,27 @@ server <- function(input, output) {
     # Make sure it closes when we exit this reactive, even if there's an error
     on.exit(progress$close())
     #First Progress
-    progress$set(message = "Fetch Data", value = 1/2)
+    progress$set(message = "Fetch Data", value = 1/3)
     
     #Generate data
     data<-team.allstats(c(input$topname,input$junname,input$midname,input$adcname,input$supname),"euw1",input$apikey)
     
     # Last progress
-    progress$inc(1, detail = "Render")
+    progress$inc(1/4, detail = "Render")
+    
     
     #Output table
-    output$mytable = DT::renderDataTable({
+    output$fulltable = DT::renderDataTable({
       data
-    })
-  })
+    }) # End table
+    #Output table
+    output$meantable = DT::renderDataTable({
+      team.summary(data,"mean")
+    }) # End table
+  })## End ObserveEvent
    
   
-}
+} # End Server
 
 ############################################################################################################
 # RUN

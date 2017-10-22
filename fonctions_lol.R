@@ -25,6 +25,7 @@
 
 lol.player <- function(pseudo, serveur, key){
   
+  pseudo<- tolower(pseudo)
   fichier.json<-paste("https://",serveur,".api.riotgames.com/lol/summoner/v3/summoners/by-name/",pseudo,"?api_key=",key,sep="")
   liste<- fromJSON(fichier.json)
   return(liste)

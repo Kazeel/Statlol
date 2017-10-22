@@ -18,8 +18,8 @@ matchinfo<-matchinfo[c(1:64,79:87)] # Correction faite : on se fiche de combatsc
 matchinfo<-matchinfo[c(1:5,13:74)]
 Data<-data.frame(Id=matchinfo$X,
                      Id_Part= matchinfo$participantId, #Not in the cleaner
-                     Id_Team=matchinfo$teamId, #In the cleaner
-                     Win=matchinfo$win, #In the cleaner
+                     Id_Team=matchinfo$teamId, 
+                     Win=matchinfo$win, 
                      Kill=matchinfo$kills,
                      Death=matchinfo$deaths,
                      Assist=matchinfo$assists,
@@ -42,9 +42,11 @@ Data<-data.frame(Id=matchinfo$X,
                      Duree=matchinfo$duration,
                      Id_game=substr(matchinfo$X,1,10))
 
-Data$Id_game<-levels(Data$Id_game)#A corriger !
+Data$Id_game<-as.factor(Data$Id_game)
+
 
 #Calc Preparation formule
+# Plus efficace avec un tapply ou meme aggregate
 J1<-Data[Data$Name=="Kazeel",]
 TxWin<-sum(J1$Win)/length(J1$Win)*100 #Taux de victoire en pourcentage.
 KDA<-(sum(Data$Kill[Data$Name==P1])+sum(Data$Assist[Data$Name==P1]))/sum(Data$Death[Data$Name==P1])

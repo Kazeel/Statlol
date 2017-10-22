@@ -162,6 +162,13 @@ team.allstats<- function(vec.players, serveur, key){
   vec.id <- team.players(vec.players, serveur, key)
   data.matchs.team <- team.matchslist(vec.players, vec.id, serveur, key)
   data <- team.matchsstats(data.matchs.team, serveur, key)
+  
+  #rename (maybe a player rename)
+  
+  for(i in 1:length(vec.id)){
+    data$summonerName[data$accountId == vec.id[i]]<-vec.players[i]
+  }
+  
   result <- team.cleaner(data, vec.id)
   return(result)
 }
@@ -216,10 +223,57 @@ team.cleaner <- function(data,vec.id){
     F_Tower=matchinfo$firstTowerKill,
     ######################################
     # team
-    Id_Team=matchinfo$teamId,
+    Blue_Side=matchinfo$teamId,
     Win=matchinfo$win,
     Duree=matchinfo$duration,
     Id_game=substr(row.names(matchinfo),1,10))
+  
+  ############################################
+  # Convertion
+  
+  clean.column$Id_game<-as.factor(clean.column$Id_game)
+  clean.column$Blue_Side[clean.column$Blue_Side == 100]<-TRUE
+  clean.column$Blue_Side[clean.column$Blue_Side == 200]<-FALSE
 
   return(clean.column)
+}
+
+#######################################################
+# team.summary
+#######################################################
+# Give some (calculate) stat of the team (winrate etc...)
+# data : a clean data of a team (use team.cleaner)
+#######################################################
+
+team.summary <-function(data,func){
+  
+  filter.data <- data[,c("Kill",
+                         "Death",
+                         "Assist",
+                         "T_Damage_D",
+                         "Damage_D",
+                         "Damage_Turret",
+                         "Turret",
+                         "Inhib",
+                         "Heal",
+                         "Heal_N",
+                         "Score_Vision",
+                         "vison_ward",
+                         "ward",
+                         "Damage_T",
+                         "CC_score",
+                         "CC_time",
+                         "Gold_E",
+                         "Minions",
+                         "Minionsbis",
+                         "F_Blood",
+                         "F_Tower",
+                         "Blue_Side",
+                         "Win",
+                         "Duree"
+                         )]
+  result<-aggregate(filter.data,by=list(data$Name), FUN = func)
+  
+  
+  return(result)
 }

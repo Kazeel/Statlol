@@ -146,4 +146,4 @@ write.csv(loop.tab, file = "stats_game_team.csv") #Enregistrement
 #####################################################################
 vec.players <- pseudos_joueurs
 data <- team.allstats(pseudos_joueurs, serveur, key)
-
+data.summary<-team.summary(data,"mean")
