@@ -13,6 +13,7 @@ require(jsonlite)
 require(curl)
 require(httr)
 require(TriMatch)
+require(googleVis)
 library(shiny)
 library(DT)
 
@@ -28,9 +29,9 @@ ui <- fluidPage(
         textInput("apikey", "Riot Api key",""),
         textInput("topname", "Top name","RKSReidoz"),
         textInput("junname", "Jungler name","Kazeel"),
-        textInput("midname", "Mid name",""),
-        textInput("adcname", "Adc name",""),
-        textInput("supname", "Sup name",""),
+        textInput("midname", "Mid name","Mashu"),
+        textInput("adcname", "Adc name","Redwhale"),
+        textInput("supname", "Sup name","TheDeathcookie"),
         actionButton("analyze", "Analyze")
         
           
@@ -38,7 +39,7 @@ ui <- fluidPage(
       #################################################################################
       # Show a plot of the generated distribution
       mainPanel(tabsetPanel(
-        tabPanel("Plot", plotOutput("plot")),
+        tabPanel("Plot", plotOutput("plotKDA")),
         tabPanel("Summary", DT::dataTableOutput("meantable")),
         tabPanel("Data", DT::dataTableOutput("fulltable"))
       )
@@ -68,15 +69,24 @@ server <- function(input, output) {
     # Last progress
     progress$inc(1/4, detail = "Render")
     
+    summary <- team.summary(data,"mean")
+    plot(gvisColumnChart(summary[,c("Group.1","Kill","Death","Assist")]))
     
     #Output table
     output$fulltable = DT::renderDataTable({
       data
     }) # End table
+    
     #Output table
     output$meantable = DT::renderDataTable({
-      team.summary(data,"mean")
+      summary
     }) # End table
+    
+    #Output Plot
+    output$plotKDA <- renderPlot({
+      
+    })#End Plot
+    
   })## End ObserveEvent
    
   

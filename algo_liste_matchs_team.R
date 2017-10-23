@@ -12,6 +12,7 @@
 #
 #
 ############################
+library(googleVis)
 
 serveur <- "euw1"
 key    <- "RGAPI-c6db6ff7-f11b-4141-86b3-6d10c1842a76"
@@ -147,3 +148,7 @@ write.csv(loop.tab, file = "stats_game_team.csv") #Enregistrement
 vec.players <- pseudos_joueurs
 data <- team.allstats(pseudos_joueurs, serveur, key)
 data.summary<-team.summary(data,"mean")
+data.normalize<-team.normalize(data)
+
+Column <- gvisColumnChart(data.summary[,c("Group.1","Kill","Death","Assist")])
+plot(Column)

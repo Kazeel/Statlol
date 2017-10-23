@@ -276,3 +276,34 @@ team.summary <-function(data,func){
   
   return(result)
 }
+
+team.normalize <-function(data){
+  
+  normalize.data <- data[,c("T_Damage_D",
+                         "Damage_D",
+                         "Damage_Turret",
+                         "Heal",
+                         "Score_Vision",
+                         "vison_ward",
+                         "ward",
+                         "Damage_T",
+                         "CC_score",
+                         "CC_time",
+                         "Gold_E",
+                         "Minions",
+                         "Minionsbis")]/data$Duree
+  result<- cbind(data[,c("Kill",
+                              "Death",
+                              "Assist",
+                              "Turret",
+                              "Inhib",
+                              "Heal_N",
+                              "F_Blood",
+                              "F_Tower",
+                              "Blue_Side",
+                              "Win",
+                              "Duree"
+  )],normalize.data)
+  
+  return(result)
+}
