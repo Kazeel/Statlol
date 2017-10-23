@@ -18,34 +18,36 @@ library(shiny)
 library(DT)
 
 # Define UI for application that draws a histogram
-ui <- fluidPage(
+ui <- navbarPage(
    
    # Application title
-   titlePanel("My LOL Team"),
+   "My LOL Team",
    
+   tabPanel("Information",
+     sidebarLayout(
+     sidebarPanel(
+       textInput("apikey", "Riot Api key",""),
+       textInput("topname", "Top name","RKSReidoz"),
+       textInput("junname", "Jungler name","Kazeel"),
+       textInput("midname", "Mid name","Mashu"),
+       textInput("adcname", "Adc name","Redwhale"),
+       textInput("supname", "Sup name","TheDeathcookie"),
+       actionButton("analyze", "Analyze")
+       
+       
+     ),
+     #################################################################################
+     # Show a plot of the generated distribution
+     mainPanel(tabsetPanel(
+       tabPanel("Plot", htmlOutput("plotKDA")),
+       tabPanel("Summary", DT::dataTableOutput("meantable")),
+       tabPanel("Data", DT::dataTableOutput("fulltable"))
+     )
+     
+     )
+   ))
    # Sidebar with a slider input for number of bins 
-   sidebarLayout(
-      sidebarPanel(
-        textInput("apikey", "Riot Api key",""),
-        textInput("topname", "Top name","RKSReidoz"),
-        textInput("junname", "Jungler name","Kazeel"),
-        textInput("midname", "Mid name","Mashu"),
-        textInput("adcname", "Adc name","Redwhale"),
-        textInput("supname", "Sup name","TheDeathcookie"),
-        actionButton("analyze", "Analyze")
-        
-          
-      ),
-      #################################################################################
-      # Show a plot of the generated distribution
-      mainPanel(tabsetPanel(
-        tabPanel("Plot", plotOutput("plotKDA")),
-        tabPanel("Summary", DT::dataTableOutput("meantable")),
-        tabPanel("Data", DT::dataTableOutput("fulltable"))
-      )
-        
-      )
-   )
+   
 )
 
 ################################################################################################################
@@ -70,7 +72,7 @@ server <- function(input, output) {
     progress$inc(1/4, detail = "Render")
     
     summary <- team.summary(data,"mean")
-    plot(gvisColumnChart(summary[,c("Group.1","Kill","Death","Assist")]))
+    
     
     #Output table
     output$fulltable = DT::renderDataTable({
@@ -83,8 +85,8 @@ server <- function(input, output) {
     }) # End table
     
     #Output Plot
-    output$plotKDA <- renderPlot({
-      
+    output$plotKDA <- renderGvis({
+      gvisColumnChart(summary[,c("Group.1","Kill","Death","Assist")],options=list(width=670, height=600))
     })#End Plot
     
   })## End ObserveEvent

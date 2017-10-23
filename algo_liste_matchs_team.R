@@ -149,6 +149,7 @@ vec.players <- pseudos_joueurs
 data <- team.allstats(pseudos_joueurs, serveur, key)
 data.summary<-team.summary(data,"mean")
 data.normalize<-team.normalize(data)
+KDA <- team.kda(data = data,filtre = "win")
 
 Column <- gvisColumnChart(data.summary[,c("Group.1","Kill","Death","Assist")])
 plot(Column)

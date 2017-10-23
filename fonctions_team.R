@@ -277,6 +277,13 @@ team.summary <-function(data,func){
   return(result)
 }
 
+#######################################################
+# team.normalize
+#######################################################
+# Give some (calculate) stat of the team (winrate etc...)
+# data : a clean data of a team (use team.cleaner)
+#######################################################
+
 team.normalize <-function(data){
   
   normalize.data <- data[,c("T_Damage_D",
@@ -304,6 +311,38 @@ team.normalize <-function(data){
                               "Win",
                               "Duree"
   )],normalize.data)
+  
+  return(result)
+}
+
+#######################################################
+# team.kda
+#######################################################
+# Give some (calculate) stat of the team (winrate etc...)
+# data : a clean data of a team (use team.cleaner)
+#######################################################
+
+team.kda <-function(data,filtre){
+  
+  data0 <- data[,c("Kill","Death","Assist")]
+  
+  if(filtre == "win"){
+    data1 <- data0[data$Win == TRUE,]
+    name <- data$Name[data$Win == TRUE]
+  }
+  if(filtre == "side"){
+    data1 <- data0[data$Blue_Side == 1,]
+    name <- data$Name[data$Blue_Side == 1]
+  }
+  else{
+    data1 <- data0
+    name <- data$Name
+  }
+  
+  somme <- aggregate(data1,by=list(name), FUN = sum)
+  
+  result <- data.frame[KDA = (somme$Kill+somme$Assist)/somme$Death,
+                       Player = somme$Group.1]
   
   return(result)
 }
