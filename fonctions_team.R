@@ -274,6 +274,5 @@ team.summary <-function(data,func){
                          )]
   result<-aggregate(filter.data,by=list(data$Name), FUN = func)
   
-  
   return(result)
 }
