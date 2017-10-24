@@ -341,8 +341,9 @@ team.kda <-function(data,filtre){
   
   somme <- aggregate(data1,by=list(name), FUN = sum)
   
-  result <- data.frame[KDA = (somme$Kill+somme$Assist)/somme$Death,
-                       Player = somme$Group.1]
+  kda <- (somme$Kill+somme$Assist)/somme$Death
+  
+  result <- cbind(kda, somme$Group.1)
   
   return(result)
 }
