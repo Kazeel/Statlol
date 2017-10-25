@@ -322,34 +322,69 @@ team.normalize <-function(data){
 # data : a clean data of a team (use team.cleaner)
 #######################################################
 
-team.kda <-function(data,filtre){
+team.kda <-function(data,filtre="none",onenumbers="no"){
+  #filtre not allowed with onenumbers
   
-  data0 <- data[,c("Kill","Death","Assist")]
-  
-  if(filtre == "win"){
-    data1 <- data0[data$Win == TRUE,]
-    name <- data$Name[data$Win == TRUE]
-  }
-  if(filtre == "side"){
-    data1 <- data0[data$Blue_Side == 1,]
-    name <- data$Name[data$Blue_Side == 1]
-  }
-  else{
-    data1 <- data0
-    name <- data$Name
+  if(onenumbers=="yes"){
+    death <- data$Death
+    death[death == 0]<-1
+    data.use<-data.frame((KDA = data$Kill+data$Assist)/death)
+    names(data.use)<-c("KDA")
   }
   
-  somme <- aggregate(data1,by=list(name), FUN = sum)
+  if(onenumbers=="no"){
+    data.use<-data[,c("Kill","Death","Assist")]
+  }
   
-  kda <- (somme$Kill+somme$Assist)/somme$Death
+  if(filtre=="none"){
+    list.filtre<-list(data$Name)
+    result<-aggregate(data.use, by=list.filtre, FUN=mean)
+    names(result)[1]<-c("Players")
+  }
   
-  result <- cbind(kda, somme$Group.1)
+  if(filtre=="side"|filtre=="win"){
+    
+    if(filtre=="side"){
+      list.elem<-c("Blue","Red")
+      Blue_Side <- data$Blue_Side
+      Blue_Side[Blue_Side == 1] <- list.elem[1]
+      Blue_Side[Blue_Side == 0] <- list.elem[2]
+      list.filtre<-list(data$Name, Blue_Side)
+    }
+    
+    if(filtre=="win"){
+      list.elem<-c("Win","Loose")
+      Win <- data$Win
+      Win[Win == TRUE] <- list.elem[1]
+      Win[Win == FALSE] <- list.elem[2]
+      list.filtre<-list(data$Name, Win)
+    }
+    
+    aggreg<-aggregate(data.use, by=list.filtre, FUN=mean)
+    result<- merge(aggreg[aggreg$Group.2==list.elem[1],-2],aggreg[aggreg$Group.2==list.elem[2],-2], by="Group.1")
+    
+    if(onenumbers=="no"){
+      names(result)<-c("Players",
+                       paste("Kill when",list.elem[1]),
+                       paste("Death when",list.elem[1]),
+                       paste("Assist when",list.elem[1]),
+                       paste("Kill when",list.elem[2]),
+                       paste("Death when",list.elem[2]),
+                       paste("Assist when",list.elem[2]))
+    }
+    
+    if(onenumbers=="yes"){
+      names(result)<-c("Players",
+                       paste("KDA when",list.elem[1]),
+                       paste("KDA when",list.elem[2]))
+    }
+  }
   
   return(result)
 }
 
 #######################################################
-# team.kda
+# team.winrate
 #######################################################
 # Give some (calculate) stat of the team (winrate etc...)
 # data : a clean data of a team (use team.cleaner)
@@ -367,7 +402,7 @@ team.winrate <-function(data,filtre="none"){
                            Col2 = c(as.numeric(winrate[2,2]),1-as.numeric(winrate[2,2])))
     names(resultat) <- c("Win", winrate[1,1], winrate[1,2])
   }
-  else{
+  if(filtre == "none"){
     winrate <- mean(data$Win)
     vector <- c(winrate, 1-winrate)
     resultat <- data.frame(Win = c("Win","Loose"), Winrate = vector)
@@ -385,14 +420,14 @@ team.winrate <-function(data,filtre="none"){
 
 team.farm <-function(data,filtre="none"){
   
-  if(filtre == "side"){
+  if(filtre == "win"){
     Win <- data$Win
     farm.min <- 60*(data$Minions+data$Minionsbis)/data$Duree
     farm.side<-aggregate(farm.min,by=list(data$Name,Win), FUN = mean)
     resultat<-merge(farm.side[farm.side$Group.2==TRUE,c("Group.1","x")],farm.side[farm.side$Group.2==FALSE,c("Group.1","x")], by="Group.1")
     names(resultat) <- c("Players", "Minions/min when Win", "Minions/min when loose")
   }
-  else{
+  if(filtre == "none"){
     farm.min <- 60*(data$Minions+data$Minionsbis)/data$Duree
     resultat<-aggregate(farm.min,by=list(data$Name), FUN = mean)
     names(resultat)<- c("Players","Minions/min")

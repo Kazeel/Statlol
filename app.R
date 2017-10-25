@@ -51,8 +51,14 @@ ui <- navbarPage(
                 fluidRow(
                   column(8,htmlOutput("farm_summary")),
                   column(8,htmlOutput("farm_win"))
-       )),
-       tabPanel("Summary", DT::dataTableOutput("meantable")),
+                  )
+                ),
+       tabPanel("KDA",
+                fluidRow(
+                  column(8,htmlOutput("kda_summary")),
+                  column(8,htmlOutput("kda_win"))
+                  )
+                ),
        tabPanel("Data", DT::dataTableOutput("fulltable"))
      )
      
@@ -126,7 +132,7 @@ server <- function(input, output) {
     progress$inc(1/10, detail = "calculate farming")
     #######################################################
     #Output Farm_win for Overview
-    output$farm_win <- renderGvis({
+    output$farm_summary <- renderGvis({
       gvisColumnChart(data = team.farm(data),
                    options = list(
                      title ="Minions kill (including jungle) per Minute",
@@ -134,10 +140,29 @@ server <- function(input, output) {
     })#End Output
     #######################################################
     #Output Farm_summary for Overview
-    output$farm_summary <- renderGvis({
-      gvisColumnChart(data = team.farm(data,"side"), 
+    output$farm_win <- renderGvis({
+      gvisColumnChart(data = team.farm(data,"win"), 
                       options = list(
                         title ="Minions kill per Minute depending of Victory",
+                        legend = {position = 'none'},
+                        colors="['#156711','#540002']"))
+    })#End Output
+    #######################################################
+    progress$inc(1/10, detail = "calculate KDA")
+    #######################################################
+    #Output Kda summary for Overview
+    output$kda_summary <- renderGvis({
+      gvisColumnChart(data = team.kda(data, onenumbers = "yes"),
+                      options = list(
+                        title ="KDA",
+                        legend = {position = 'none'}))
+    })#End Output
+    #######################################################
+    #Output Kda win for Overview
+    output$kda_win <- renderGvis({
+      gvisColumnChart(data = team.kda(data=data,filtre="win",onenumbers = "yes"), 
+                      options = list(
+                        title ="KDA depending of Victory",
                         legend = {position = 'none'},
                         colors="['#156711','#540002']"))
     })#End Output
