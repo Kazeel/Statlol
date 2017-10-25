@@ -23,7 +23,7 @@ ui <- navbarPage(
    # Application title
    "My LOL Team",
    
-   tabPanel("Information",
+   tabPanel("Overview",
      sidebarLayout(
      sidebarPanel(
        textInput("apikey", "Riot Api key",""),
@@ -39,7 +39,19 @@ ui <- navbarPage(
      #################################################################################
      # Show a plot of the generated distribution
      mainPanel(tabsetPanel(
-       tabPanel("Plot", htmlOutput("plotKDA")),
+       tabPanel("Winrate", 
+                fluidRow(
+                  column(4,htmlOutput("winrate_summary")),
+                  column(4,
+                         htmlOutput("winrate_Bside"),
+                         htmlOutput("winrate_Rside")),
+                  column(4)
+                  )),
+       tabPanel("Farm",
+                fluidRow(
+                  column(8,htmlOutput("farm_summary")),
+                  column(8,htmlOutput("farm_win"))
+       )),
        tabPanel("Summary", DT::dataTableOutput("meantable")),
        tabPanel("Data", DT::dataTableOutput("fulltable"))
      )
@@ -69,11 +81,67 @@ server <- function(input, output) {
     data<-team.allstats(c(input$topname,input$junname,input$midname,input$adcname,input$supname),"euw1",input$apikey)
     
     # Last progress
-    progress$inc(1/4, detail = "Render")
+    progress$inc(1/10, detail = "Render")
     
-    summary <- team.summary(data,"mean")
-    
-    
+    #######################################################
+    #Output Winrate_summary for Overview
+    output$winrate_summary <- renderGvis({
+      gvisPieChart(data = team.winrate(data), 
+                   labelvar = "Win", 
+                   numvar = "Winrate", 
+                   options = list(
+                     title ="Winrate of the team",
+                     legend = {position = 'none'},
+                     width=300, height=300,
+                     colors="['#156711','#540002']"))
+    })#End Output
+    #######################################################
+    progress$inc(1/10, detail = "calculate Winrate")
+    winrate_side <- team.winrate(data,"side")
+    #######################################################
+    #Output Winrate_Bside for Overview
+    output$winrate_Bside <- renderGvis({
+      gvisPieChart(data = winrate_side[,c("Win","Blue")], 
+                   labelvar = "Win", 
+                   numvar = "Blue", 
+                   options = list(
+                     title ="Winrate when team play on Blue Side",
+                     legend = {position = 'none'},
+                     width=300, height=300,
+                     colors="['#156711','#540002']"))
+    })#End Output
+    #######################################################
+    #Output Winrate_Rside for Overview
+    output$winrate_Rside <- renderGvis({
+      gvisPieChart(data = winrate_side[,c("Win","Red")], 
+                   labelvar = "Win", 
+                   numvar = "Red", 
+                   options = list(
+                     title ="Winrate when team play on Red Side",
+                     legend = {position = 'none'},
+                     width=300, height=300,
+                     colors="['#156711','#540002']"))
+    })#End Output
+    #######################################################
+    progress$inc(1/10, detail = "calculate farming")
+    #######################################################
+    #Output Farm_win for Overview
+    output$farm_win <- renderGvis({
+      gvisColumnChart(data = team.farm(data),
+                   options = list(
+                     title ="Minions kill (including jungle) per Minute",
+                     legend = {position = 'none'}))
+    })#End Output
+    #######################################################
+    #Output Farm_summary for Overview
+    output$farm_summary <- renderGvis({
+      gvisColumnChart(data = team.farm(data,"side"), 
+                      options = list(
+                        title ="Minions kill per Minute depending of Victory",
+                        legend = {position = 'none'},
+                        colors="['#156711','#540002']"))
+    })#End Output
+    #######################################################
     #Output table
     output$fulltable = DT::renderDataTable({
       data
@@ -81,9 +149,9 @@ server <- function(input, output) {
     
     #Output table
     output$meantable = DT::renderDataTable({
-      summary
+      team.summary(data,"mean")
     }) # End table
-    
+    #######################################################
     #Output Plot
     output$plotKDA <- renderGvis({
       gvisColumnChart(summary[,c("Group.1","Kill","Death","Assist")],options=list(width=670, height=600))

@@ -347,3 +347,56 @@ team.kda <-function(data,filtre){
   
   return(result)
 }
+
+#######################################################
+# team.kda
+#######################################################
+# Give some (calculate) stat of the team (winrate etc...)
+# data : a clean data of a team (use team.cleaner)
+#######################################################
+
+team.winrate <-function(data,filtre="none"){
+  
+  if(filtre == "side"){
+    Blue_Side <- data$Blue_Side
+    Blue_Side[Blue_Side == 1] <- "Blue"
+    Blue_Side[Blue_Side == 0] <- "Red"
+    winrate <- t(aggregate(data$Win,by=list(Blue_Side), FUN = mean))
+    resultat <- data.frame(Win = c("Win","Loose"),
+                           Col1 = c(as.numeric(winrate[2,1]),1-as.numeric(winrate[2,1])),
+                           Col2 = c(as.numeric(winrate[2,2]),1-as.numeric(winrate[2,2])))
+    names(resultat) <- c("Win", winrate[1,1], winrate[1,2])
+  }
+  else{
+    winrate <- mean(data$Win)
+    vector <- c(winrate, 1-winrate)
+    resultat <- data.frame(Win = c("Win","Loose"), Winrate = vector)
+    
+  }
+  
+  return(resultat)
+}
+#######################################################
+# team.farm
+#######################################################
+# Give some (calculate) stat of the team (winrate etc...)
+# data : a clean data of a team (use team.cleaner)
+#######################################################
+
+team.farm <-function(data,filtre="none"){
+  
+  if(filtre == "side"){
+    Win <- data$Win
+    farm.min <- 60*(data$Minions+data$Minionsbis)/data$Duree
+    farm.side<-aggregate(farm.min,by=list(data$Name,Win), FUN = mean)
+    resultat<-merge(farm.side[farm.side$Group.2==TRUE,c("Group.1","x")],farm.side[farm.side$Group.2==FALSE,c("Group.1","x")], by="Group.1")
+    names(resultat) <- c("Players", "Minions/min when Win", "Minions/min when loose")
+  }
+  else{
+    farm.min <- 60*(data$Minions+data$Minionsbis)/data$Duree
+    resultat<-aggregate(farm.min,by=list(data$Name), FUN = mean)
+    names(resultat)<- c("Players","Minions/min")
+  }
+  
+  return(resultat)
+}
